@@ -24,7 +24,7 @@ module "blog_vpc" {
   public_subnets  = ["${var.environment.network_prefix}.101.0/24", "${var.environment.network_prefix}.102.0/24", "${var.environment.network_prefix}.103.0/24"]
 
   tags = {
-    Environment = var.environement.name
+    Environment = var.environment.name
   }
 }
 
@@ -32,7 +32,7 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "6.5.3"
   # insert the 1 required variable here
-  name             = "${var.environement.name}-blog"
+  name             = "${var.environment.name}-blog"
   min_size         = var.asg_min_size
   max_size         = var.asg_max_size
   desired_capacity = 1
@@ -49,7 +49,7 @@ module "blog_alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name = "${var.environement.name}-blog-alb"
+  name = "${var.environment.name}-blog-alb"
 
   load_balancer_type = "application"
 
@@ -88,7 +88,7 @@ module "blog_sg" {
   version = "4.13.0"
 
   vpc_id              = module.blog_vpc.vpc_id
-  name                = "${var.environement.name}-blog"
+  name                = "${var.environment.name}-blog"
   ingress_rules       = ["https-443-tcp", "http-80-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
   egress_rules        = ["all-all"]
